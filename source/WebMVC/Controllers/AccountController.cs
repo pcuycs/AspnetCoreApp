@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using WebMVC.Models;
 
@@ -89,6 +91,12 @@ namespace WebMVC.Controllers
             }
         }
 
+        public async Task<ActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return View(typeof(Index));
+        }
+
         public ActionResult Login()
         {
             return View(new LoginModel());
@@ -109,21 +117,36 @@ namespace WebMVC.Controllers
             var authenProperties = new AuthenticationProperties
             {
                 IsPersistent = model.RememberMe,
-                
+
             };
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity), authenProperties);
             if (model.RememberMe)
             {
-                Response.Cookies.Append("Email", model.Email);
-                Response.Cookies.Append("PassWord", model.PassWord);
+                //Response.Cookies.Append("Email", Convert.ToBase64String(Encoding.ASCII.GetBytes(model.Email)), new CookieOptions
+                //{
+                //    Expires = DateTimeOffset.UtcNow.AddMinutes(2)
+                //});
+                //Response.Cookies.Append("PassWord", Convert.ToBase64String(Encoding.ASCII.GetBytes(model.PassWord)), new CookieOptions
+                //{
+                //    Expires = DateTimeOffset.UtcNow.AddMinutes(2)
+                //});
+
+                Response.Cookies.Append("Email", model.Email.Trim(), new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(2)
+                });
+                Response.Cookies.Append("PassWord", model.PassWord.Trim(), new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(2)
+                });
 
             }
             else
             {
                 //
-                Response.Cookies.Append("Email", null);
-                Response.Cookies.Append("PassWord", null);
+                Response.Cookies.Append("Email", "");
+                Response.Cookies.Append("PassWord", "");
             }
             return Redirect("/");
         }

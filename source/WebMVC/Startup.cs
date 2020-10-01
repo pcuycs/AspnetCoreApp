@@ -54,9 +54,9 @@ namespace WebMVC
                 options.Secure = _environment.IsDevelopment()
                   ? CookieSecurePolicy.None : CookieSecurePolicy.Always;
             });
-            services.AddDataProtection().SetApplicationName($"my-app-{_environment.EnvironmentName}")
-                .PersistKeysToFileSystem(new System.IO.DirectoryInfo($@"{_environment.ContentRootPath}\Keys")).ProtectKeysWithDpapi();
-            services.AddSession();
+            //services.AddDataProtection().SetApplicationName($"my-app-{_environment.EnvironmentName}")
+            //    .PersistKeysToFileSystem(new System.IO.DirectoryInfo($@"{_environment.ContentRootPath}\Keys")).ProtectKeysWithDpapi();
+            //services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +81,7 @@ namespace WebMVC
             app.UseAuthentication();
             app.UseAuthorization();
             
-            app.UseSession();
+            //app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

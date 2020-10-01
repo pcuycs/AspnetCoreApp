@@ -9,7 +9,7 @@
 <h4>LoginModel</h4>
 <hr />
 <div class="row">
-    @*<div class="col-md-4">
+    <div class="col-md-4">
             <form asp-action="Login">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
@@ -31,9 +31,9 @@
                     <input type="submit" value="Create" class="btn btn-primary" />
                 </div>
             </form>
-        </div>*@
+        </div>
 
-    <div class="col-md-4">
+    @*<div class="col-md-4">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Email" class="control-label"></label>
@@ -53,7 +53,7 @@
         <div class="form-group">
             <input id="btnLogin" type="submit" value="Create" class="btn btn-primary" />
         </div>
-    </div>
+    </div>*@
 </div>
 
 <div>
@@ -64,51 +64,50 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
-
 <script>
     $(document).ready(function () {
-        
-        console.log('load page ' + localStorage.userName);
-        if (localStorage.remember && localStorage.remember != '') {
-            $('#RememberMe').attr('checked', 'checked');
-            $('#Email').val(localStorage.userName);
-            $('#PassWord').val(localStorage.passWord);
-        } else {
-            $('#RememberMe').removeAttr('checked');
-            $('#Email').val('');
-            $('#PassWord').val('');
-        }
-        showHideButton();
-        $("#RememberMe").click(function () {
-            if ($('#RememberMe').is(':checked')) {
-                console.log('checked + ' + localStorage.userName);
-                localStorage.userName = $('#Email').val();
-                localStorage.passWord = $('#PassWord').val();
-                localStorage.remember = $('#RememberMe').val();
+        var cookie = document.cookie;
+        console.log(btoa("aaaaaaaaaaaafff"));
+        console.log('get cookie' + cookie);
+        if (cookie) {
+            debugger;
+            var allCookies = cookie.split(';');
+            for (let i = 0; i < allCookies.length; i++) {
+                var cookieArray = allCookies[i].split('=')
+                if (cookieArray[0].trim() == 'Email') {
+                    //console.log('decodeEmail  value= ' + atob(cookieArray[1]));
+                    document.getElementById('Email').value = decodeURIComponent(cookieArray[1]);
+                }
+                if (cookieArray[0].trim() == 'PassWord') {
+                    //console.log('decode pass value= ' + atob(cookieArray[1]));
+                    document.getElementById('PassWord').value = decodeURIComponent(cookieArray[1]);
+                }
+            }
+            
 
-            }
-            else {
-                console.log('un-checked'  + localStorage.userName);
-                localStorage.userName = '';
-                localStorage.passWord = '';
-                localStorage.remember = '';
-            }
-            console.log("ba me viet nam anh hung!");
-        });
+        }
+
+        //https://stackoverflow.com/questions/37401301/encode-base-64-in-javascript-decode-unicode-in-c-sharp
+        showHideButton();
         $('#Email').keyup(function () {
+            debugger;
             showHideButton();
         });
         $('#PassWord').keyup(function () {
+            debugger;
             showHideButton();
         });
 
         function showHideButton() {
+            debugger;
             if ($('#Email').val() === '' || $('#PassWord').val() === '') {
-                $('#btnLogin').prop('disabled', true);
+                $('input[type="submit"').prop('disabled', true);
+                //$('input[type="submit"').removeAttr('disabled');
 
             }
             else {
-                $('#btnLogin').prop('disabled', false);
+                $('input[type="submit"').prop('disabled', false);
+                //$('input[type="submit"').attr('disabled', 'disabled');
             }
         }
     });

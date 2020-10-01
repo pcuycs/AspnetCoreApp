@@ -1,0 +1,10 @@
+**/bin/*
+**/obj/*
+*.nupkg
+src/.vs/
+src/packages/
+**/.vs/*
+**/.vscode/*
+**/publish/
+.idea/
+/source/WebMVC/*.user

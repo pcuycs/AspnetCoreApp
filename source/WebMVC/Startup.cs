@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace WebMVC
 {
+    //https://stackoverflow.com/questions/46318461/asp-net-core-remember-me-persistent-cookie-not-works-after-deploy
     public class Startup
     {
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
